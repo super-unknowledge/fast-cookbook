@@ -1,6 +1,6 @@
 from fastapi import FastAPI, HTTPException
 from models import Task, TaskWithID
-from operations import read_all_tasks, create_task, modify_task, remove_task
+from operations import read_all_tasks, create_task, modify_task, remove_task, read_task
 from pydantic import BaseModel
 
 app = FastAPI()
