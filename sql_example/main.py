@@ -1,7 +1,8 @@
 from fastapi import Depends, FastAPI
 from sqlalchemy.orm import Session
 from database import SessionLocal, User
-from pydantic import BaseModel
+from pydantic import BaseModel, EmailStr, field_validator
+from typing import Optional
 from fastapi import HTTPException
 
 def get_db():
@@ -20,7 +21,16 @@ def read_users(db: Session = Depends(get_db)):
 
 class UserBody(BaseModel):
 	name: str
-	email: str
+	email: EmailStr
+	age: int
+	
+	@field_validator("age")
+	def validate_age(cls, value):
+		if value < 18 or value > 100:
+			raise ValueError(
+				"Age must be between 18 and 100"
+			)
+		return value
 
 @app.post("/user")
 def add_new_user(
