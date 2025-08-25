@@ -1,4 +1,5 @@
-id,title,description,status
+id,title,description,status,priority
+1,Task One,Description One,Incomplete
+2,Task Two,Description Two,Ongoing,higher
 3,string,string,string
-4,To Define,will be done,Ready
-5,To Define,will be done,Ready
+4,string,string,string

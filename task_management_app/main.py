@@ -1,6 +1,7 @@
 from fastapi import FastAPI, HTTPException
 from models import Task, TaskWithID
-from operations import read_all_tasks, create_task, modify_task, remove_task, read_task
+from models import TaskV2, TaskV2WithID
+from operations import read_all_tasks, create_task, modify_task, remove_task, read_task, read_all_tasks_v2
 from pydantic import BaseModel
 from typing import Optional
 
@@ -16,6 +17,14 @@ def search_tasks(keyword: str):
 		in (task.title + task.description).lower()
 	]
 	return filtered_tasks
+
+
+@app.get("/v2/tasks", response_model=list[TaskV2WithID])
+def get_tasks_v2():
+	tasks = read_all_tasks_v2()
+	for task in tasks:
+		print(task)
+	return tasks
 
 
 @app.get("/tasks", response_model=list[TaskWithID])
