@@ -2,12 +2,38 @@ from fastapi import FastAPI, HTTPException
 from models import Task, TaskWithID
 from operations import read_all_tasks, create_task, modify_task, remove_task, read_task
 from pydantic import BaseModel
+from typing import Optional
 
 app = FastAPI()
 
-@app.get("/tasks", response_model=list[TaskWithID])
-def get_tasks():
+@app.get("/tasks/search", response_model=list[TaskWithID])
+def search_tasks(keyword: str):
 	tasks = read_all_tasks()
+	filtered_tasks = [
+		task
+		for task in tasks
+		if keyword.lower()
+		in (task.title + task.description).lower()
+	]
+	return filtered_tasks
+
+
+@app.get("/tasks", response_model=list[TaskWithID])
+def get_tasks(
+	status: Optional[str] = None,
+	title: Optional[str] = None,
+):
+	tasks = read_all_tasks()
+	if status:
+		tasks = [
+			task
+			for task in tasks
+			if task.status == status
+		]
+	if title:
+		tasks = [
+			task for task in tasks if task.title == title
+		]
 	return tasks
 
 
